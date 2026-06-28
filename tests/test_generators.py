@@ -28,6 +28,11 @@ def test_generate_cv_template(temp_dir):
     assert (path / "src" / "model.py").exists()
 
 
+def test_generate_nlp_template(temp_dir):
+    path = generate_project("nlp-project", template="nlp", base_path=temp_dir)
+    assert (path / "src" / "tokenizer.py").exists()
+
+
 def test_generate_with_dvc(temp_dir):
     path = generate_project("dvc-project", with_dvc=True, base_path=temp_dir)
     assert (path / "dvc.yaml").exists()

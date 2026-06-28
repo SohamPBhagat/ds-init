@@ -5,10 +5,10 @@ from typing import Dict, Any
 from jinja2 import Template
 from ds_init.templates import (
     BASIC_TEMPLATE,
-    DVC_TEMPLATE,
-    MLFLOW_TEMPLATE,
     CV_TEMPLATE,
     NLP_TEMPLATE,
+    DVC_TEMPLATE,
+    MLFLOW_TEMPLATE,
 )
 from ds_init.utils import validate_project_name, safe_mkdir
 
@@ -21,20 +21,7 @@ def generate_project(
     with_uv: bool = False,
     base_path: Path = None,
 ) -> Path:
-    """Generate a data science project.
-
-    Args:
-        project_name: Name of the project directory.
-        template: Template type ("basic", "cv", "nlp").
-        with_dvc: Include DVC configuration.
-        with_mlflow: Include MLflow tracking.
-        with_uv: Set up uv virtual environment.
-        base_path: Base directory (defaults to current directory).
-
-    Returns:
-        Path to the created project directory.
-    """
-    # Validate project name before any filesystem operations
+    """Generate a data science project."""
     project_name = validate_project_name(project_name)
 
     if base_path is None:
@@ -44,55 +31,49 @@ def generate_project(
     if project_path.exists():
         raise FileExistsError(f"Directory already exists: {project_path}")
 
-    # Use safe_mkdir for all directory creation so errors are clear
+    # Core directories (always created)
     safe_mkdir(project_path)
     safe_mkdir(project_path / "src")
     safe_mkdir(project_path / "configs")
     safe_mkdir(project_path / "notebooks")
-    safe_mkdir(project_path / "data")
     safe_mkdir(project_path / "data" / "raw")
+    safe_mkdir(project_path / "data" / "processed")
+    safe_mkdir(project_path / "models")
+    safe_mkdir(project_path / "logs")
 
-    # DVC-specific directories (only created when DVC is enabled)
-    if with_dvc:
-        safe_mkdir(project_path / "data" / "processed")
-        safe_mkdir(project_path / "models")
-        safe_mkdir(project_path / "logs")
+    # Assemble template files
+    files: Dict[str, str] = dict(BASIC_TEMPLATE)
 
-    # Start with basic template
-    files = dict(BASIC_TEMPLATE)
-
-    # Add template-specific files
     if template == "cv":
         files.update(CV_TEMPLATE)
     elif template == "nlp":
         files.update(NLP_TEMPLATE)
 
-    # Add optional components
     if with_dvc:
         files.update(DVC_TEMPLATE)
 
     if with_mlflow:
         files.update(MLFLOW_TEMPLATE)
-        # Update requirements for mlflow
         if "requirements.txt" in files:
-            files["requirements.txt"] += "mlflow>=2.0.0\n"
+            files["requirements.txt"] += "\n# Experiment tracking\nmlflow>=2.0.0\n"
 
-    # Render and write files
+    if with_uv:
+        files[".uvignore"] = "# Files to ignore in uv projects\n__pycache__/\n*.pyc\n"
+        files["pyproject.toml"] = f"""[project]
+name = "{project_name}"
+version = "0.1.0"
+description = "Add your description here"
+requires-python = ">=3.9"
+dependencies = []
+
+[tool.uv]
+dev-dependencies = []
+"""
+
+    # Render and write all files
     for rel_path, content in files.items():
         full_path = project_path / rel_path
         full_path.parent.mkdir(parents=True, exist_ok=True)
-
-        # Render Jinja2 template
-        t = Template(content)
-        rendered = t.render(project_name=project_name)
-
-        full_path.write_text(rendered, encoding="utf-8")
-
-    # uv setup
-    if with_uv:
-        uv_ignore = project_path / ".uvignore"
-        uv_ignore.write_text(
-            "data/\nmodels/\nlogs/\n__pycache__/\n*.pyc\n", encoding="utf-8"
-        )
+        full_path.write_text(Template(content).render(project_name=project_name))
 
     return project_path
