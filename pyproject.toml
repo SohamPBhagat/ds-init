@@ -1,0 +1,19 @@
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ds-init"
+version = "0.1.0"
+description = "Scaffold production-ready data science projects in seconds"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = ["click>=8.0", "jinja2>=3.0"]
+authors = [{name = "Soham Bhagat", email = "soham@example.com"}]
+classifiers = ["Development Status :: 3 - Alpha", "License :: OSI Approved :: MIT License", "Programming Language :: Python :: 3"]
+
+[project.scripts]
+ds-init = "ds_init.cli:cli"
+
+[project.optional-dependencies]
+dev = ["pytest>=7.0", "pytest-cov>=4.0"]
