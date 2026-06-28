@@ -26,8 +26,10 @@ def init(project_name, template, with_dvc, with_mlflow, with_uv, interactive):
     PROJECT_NAME is the name of the directory to create.
     """
     if interactive:
-        click.echo("Interactive mode coming soon!")
-        return
+        import sys
+        if not sys.stdin.isatty():
+            click.echo("Interactive mode requires a TTY — skip with project-name or flags.")
+        # Continue with non-interactive defaults
 
     from ds_init.generators import generate_project
 
@@ -39,7 +41,7 @@ def init(project_name, template, with_dvc, with_mlflow, with_uv, interactive):
             with_mlflow=with_mlflow,
             with_uv=with_uv,
         )
-        click.echo(f"Created {project_name}/")
+        click.echo(f"✓ Created {project_name}/")
         click.echo(f"  cd {project_name}")
         click.echo(f"  pip install -r requirements.txt")
         if with_uv:

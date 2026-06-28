@@ -1,6 +1,5 @@
 """Project generation logic."""
 
-import shutil
 from pathlib import Path
 from typing import Dict, Any
 from jinja2 import Template
