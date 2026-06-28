@@ -1,0 +1,2 @@
+[console_scripts]
+ds-init = ds_init.cli:cli

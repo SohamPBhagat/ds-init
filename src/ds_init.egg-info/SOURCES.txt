@@ -1,0 +1,13 @@
+pyproject.toml
+src/ds_init/__init__.py
+src/ds_init/cli.py
+src/ds_init/generators.py
+src/ds_init/templates.py
+src/ds_init.egg-info/PKG-INFO
+src/ds_init.egg-info/SOURCES.txt
+src/ds_init.egg-info/dependency_links.txt
+src/ds_init.egg-info/entry_points.txt
+src/ds_init.egg-info/requires.txt
+src/ds_init.egg-info/top_level.txt
+tests/test_cli.py
+tests/test_generators.py
