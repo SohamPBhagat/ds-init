@@ -19,22 +19,38 @@ def cli():
 @click.option("--with-dvc", is_flag=True, help="Add DVC configuration")
 @click.option("--with-mlflow", is_flag=True, help="Add MLflow experiment tracking")
 @click.option("--with-uv", is_flag=True, help="Set up uv virtual environment")
-def init(project_name, template, with_dvc, with_mlflow, with_uv):
+@click.option("--interactive", "-i", is_flag=True, help="Interactive mode")
+def init(project_name, template, with_dvc, with_mlflow, with_uv, interactive):
     """Create a new data science project.
 
     PROJECT_NAME is the name of the directory to create.
     """
-    click.echo(f"Initializing project: {project_name}")
-    click.echo(f"Template: {template}")
-    flags = []
-    if with_dvc:
-        flags.append("dvc")
-    if with_mlflow:
-        flags.append("mlflow")
-    if with_uv:
-        flags.append("uv")
-    if flags:
-        click.echo(f"With: {', '.join(flags)}")
+    if interactive:
+        click.echo("Interactive mode coming soon!")
+        return
+
+    from ds_init.generators import generate_project
+
+    try:
+        path = generate_project(
+            project_name=project_name,
+            template=template,
+            with_dvc=with_dvc,
+            with_mlflow=with_mlflow,
+            with_uv=with_uv,
+        )
+        click.echo(f"Created {project_name}/")
+        click.echo(f"  cd {project_name}")
+        click.echo(f"  pip install -r requirements.txt")
+        if with_uv:
+            click.echo(f"  uv sync")
+        if with_dvc:
+            click.echo(f"  dvc init")
+        if with_mlflow:
+            click.echo(f"  mlflow ui")
+    except FileExistsError as e:
+        click.echo(f"Error: {e}", err=True)
+        raise SystemExit(1)
 
 
 if __name__ == "__main__":
