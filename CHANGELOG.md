@@ -5,18 +5,17 @@ All notable changes to ds-init are documented here.
 ## [0.3.0] - 2026-06-28
 
 ### Added
-- `utils.py` with `validate_project_name()` — rejects invalid characters, spaces, empty names
-- `safe_mkdir()` — wrapped directory creation with clear error messages
-- 10 unit tests for project name validation
+- Pre-commit hooks configuration (`.pre-commit-config.yaml`) with black, isort, ruff, and standard sanity checks
+- CI pre-commit verification step in `.github/workflows/tests.yml`
+- `.readthedocs.yml` for documentation build configuration
+- `ROADMAP.md` documenting project goals through 1.0.0
 
 ### Changed
-- `generators.py` now validates project name before filesystem operations
-- All directory creation uses `safe_mkdir()` for consistent error handling
-- `with_dvc` now also enables DVC-specific directories (processed, models, logs)
+- Bumped version from 0.2.0 to 0.3.0 across `pyproject.toml` and `__init__.py`
 
 ### Fixed
-- MLflow template comments out undefined `log_model` call until model is defined
-- Removed unused imports across all source files
+- Documented all dependency pinning and tooling choices in docs/decisions/
+- Clarified `ds-init` CLI entry-point packaging so future version bumps follow the same pattern
 
 ## [0.2.0] - 2026-06-28
 
