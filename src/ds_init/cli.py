@@ -2,6 +2,7 @@
 
 import click
 from ds_init import __version__
+from ds_init.utils import validate_project_name
 
 
 @click.group()
@@ -37,6 +38,13 @@ def init(project_name, template, with_dvc, with_mlflow, with_uv, interactive):
                 "Interactive mode requires a TTY — skip with project-name or flags."
             )
         # Continue with non-interactive defaults
+
+    # Validate project name before calling generator
+    try:
+        project_name = validate_project_name(project_name)
+    except ValueError as e:
+        click.echo(f"Error: {e}", err=True)
+        raise SystemExit(1)
 
     from ds_init.generators import generate_project
 
