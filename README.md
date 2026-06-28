@@ -2,8 +2,7 @@
 
 <div align="center">
 
-![PyPI Version](https://img.shields.io/pypi/v/ds-init?color=blue)
-![Python Version](https://img.shields.io/pypi/pyversions/ds-init)
+![PyPI Version](https://img.shields.io/badge/coming_soon-PRETTY%20SOON-success)
 ![License](https://img.shields.io/badge/License-MIT-green)
 ![Stars](https://img.shields.io/github/stars/SohamPBhagat/ds-init?style=social)
 
