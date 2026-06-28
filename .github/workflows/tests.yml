@@ -48,7 +48,7 @@ jobs:
 
       - name: Check formatting with black
         run: |
-          black --check src/ tests/
+          black --check --target-version py312 src/ tests/
 
       - name: Lint with ruff
         run: |

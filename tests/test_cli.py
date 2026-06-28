@@ -26,7 +26,9 @@ def test_init_basic():
 def test_init_with_flags():
     runner = CliRunner()
     with runner.isolated_filesystem():
-        result = runner.invoke(init, ["my-project", "--template", "cv", "--with-dvc", "--with-mlflow"])
+        result = runner.invoke(
+            init, ["my-project", "--template", "cv", "--with-dvc", "--with-mlflow"]
+        )
         assert result.exit_code == 0
         assert "Created my-project/" in result.output
         assert "cd my-project" in result.output

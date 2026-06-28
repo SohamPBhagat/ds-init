@@ -83,6 +83,8 @@ def generate_project(
     # uv setup
     if with_uv:
         uv_ignore = project_path / ".uvignore"
-        uv_ignore.write_text("data/\nmodels/\nlogs/\n__pycache__/\n*.pyc\n", encoding="utf-8")
+        uv_ignore.write_text(
+            "data/\nmodels/\nlogs/\n__pycache__/\n*.pyc\n", encoding="utf-8"
+        )
 
     return project_path

@@ -13,9 +13,13 @@ def cli():
 
 @cli.command()
 @click.argument("project_name")
-@click.option("--template", "-t", default="basic",
-              type=click.Choice(["basic", "cv", "nlp", "ts"]),
-              help="Project template type")
+@click.option(
+    "--template",
+    "-t",
+    default="basic",
+    type=click.Choice(["basic", "cv", "nlp", "ts"]),
+    help="Project template type",
+)
 @click.option("--with-dvc", is_flag=True, help="Add DVC configuration")
 @click.option("--with-mlflow", is_flag=True, help="Add MLflow experiment tracking")
 @click.option("--with-uv", is_flag=True, help="Set up uv virtual environment")
@@ -27,8 +31,11 @@ def init(project_name, template, with_dvc, with_mlflow, with_uv, interactive):
     """
     if interactive:
         import sys
+
         if not sys.stdin.isatty():
-            click.echo("Interactive mode requires a TTY — skip with project-name or flags.")
+            click.echo(
+                "Interactive mode requires a TTY — skip with project-name or flags."
+            )
         # Continue with non-interactive defaults
 
     from ds_init.generators import generate_project
