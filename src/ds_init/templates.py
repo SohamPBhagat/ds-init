@@ -208,7 +208,7 @@ def train(config: dict, experiment_name: str = "ds-init"):
         # model.fit(X_train, y_train)
 
         mlflow.log_metric("accuracy", 0.95)  # placeholder
-        mlflow.sklearn.log_model(model, "model")
+        # mlflow.sklearn.log_model(model, "model")  # uncomment once model is defined
         print("Logged run to MLflow")
 
 

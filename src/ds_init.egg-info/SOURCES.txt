@@ -1,3 +1,5 @@
+LICENSE
+README.md
 pyproject.toml
 src/ds_init/__init__.py
 src/ds_init/cli.py
