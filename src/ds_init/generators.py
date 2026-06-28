@@ -10,6 +10,7 @@ from ds_init.templates import (
     CV_TEMPLATE,
     NLP_TEMPLATE,
 )
+from ds_init.utils import validate_project_name, safe_mkdir
 
 
 def generate_project(
@@ -24,7 +25,7 @@ def generate_project(
 
     Args:
         project_name: Name of the project directory.
-        template: Template type ("basic", "cv", "nlp", "ts").
+        template: Template type ("basic", "cv", "nlp").
         with_dvc: Include DVC configuration.
         with_mlflow: Include MLflow tracking.
         with_uv: Set up uv virtual environment.
@@ -33,6 +34,9 @@ def generate_project(
     Returns:
         Path to the created project directory.
     """
+    # Validate project name before any filesystem operations
+    project_name = validate_project_name(project_name)
+
     if base_path is None:
         base_path = Path.cwd()
 
@@ -40,12 +44,19 @@ def generate_project(
     if project_path.exists():
         raise FileExistsError(f"Directory already exists: {project_path}")
 
-    project_path.mkdir(parents=True)
-    (project_path / "src").mkdir(exist_ok=True)
-    (project_path / "configs").mkdir(exist_ok=True)
-    (project_path / "notebooks").mkdir(exist_ok=True)
-    (project_path / "data").mkdir(exist_ok=True)
-    (project_path / "data" / "raw").mkdir(exist_ok=True)
+    # Use safe_mkdir for all directory creation so errors are clear
+    safe_mkdir(project_path)
+    safe_mkdir(project_path / "src")
+    safe_mkdir(project_path / "configs")
+    safe_mkdir(project_path / "notebooks")
+    safe_mkdir(project_path / "data")
+    safe_mkdir(project_path / "data" / "raw")
+
+    # DVC-specific directories (only created when DVC is enabled)
+    if with_dvc:
+        safe_mkdir(project_path / "data" / "processed")
+        safe_mkdir(project_path / "models")
+        safe_mkdir(project_path / "logs")
 
     # Start with basic template
     files = dict(BASIC_TEMPLATE)
@@ -59,9 +70,6 @@ def generate_project(
     # Add optional components
     if with_dvc:
         files.update(DVC_TEMPLATE)
-        (project_path / "data" / "processed").mkdir(exist_ok=True)
-        (project_path / "models").mkdir(exist_ok=True)
-        (project_path / "logs").mkdir(exist_ok=True)
 
     if with_mlflow:
         files.update(MLFLOW_TEMPLATE)
