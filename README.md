@@ -2,8 +2,9 @@
 
 <div align="center">
 
-![PyPI](https://img.shields.io/pypi/pyversions/ds-init.svg)
+![GitHub stars](https://img.shields.io/github/stars/SohamPBhagat/ds-init?style=social)
 ![License](https://img.shields.io/badge/License-MIT-green)
+![Python](https://img.shields.io/badge/python-3.9%2B-blue)
 ![Stars](https://img.shields.io/github/stars/SohamPBhagat/ds-init?style=social)
 
 **Scaffold production-ready data science projects in seconds.**
